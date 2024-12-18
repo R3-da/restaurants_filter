@@ -126,6 +126,10 @@ class _RestaurantListItemState extends State<RestaurantListItem> {
                       });
                     },
                   ),
+
+                  // Space between the like button and rating
+                  const SizedBox(height: 48),
+
                   // Star icon with average rating
                   Row(
                     children: [
