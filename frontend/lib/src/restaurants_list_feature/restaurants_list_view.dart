@@ -32,7 +32,7 @@ class RestaurantsListView extends StatelessWidget {
             title: Text(
               'Restaurants List', // This will become the title in the sticky bar
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -43,6 +43,20 @@ class RestaurantsListView extends StatelessWidget {
                 Image.asset(
                   'assets/images/sliver_food_image.jpg',
                   fit: BoxFit.cover,
+                ),
+                // Gradient overlay from dark at the bottom to transparent at the top
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment
+                          .bottomCenter, // Start gradient at the bottom
+                      end: Alignment.topCenter, // End gradient at the top
+                      colors: [
+                        Colors.black.withOpacity(0.9), // Dark at the bottom
+                        Colors.black.withOpacity(0), // Transparent at the top
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
