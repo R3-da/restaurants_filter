@@ -16,62 +16,121 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map? data;
-  List? usersData;
+  List? restaurantsData;
+  String? selectedCuisineType;
 
-  getUsers() async {
-    http.Response response =
-        await http.get(Uri.parse('http://10.0.2.2:5000/api/users'));
+  // List of cuisine types (you can modify this list based on available types)
+  List<String> cuisineTypes = [
+    'All',
+    'Italian',
+    'Chinese',
+    'Indian',
+    'Mexican',
+    'Japanese',
+    'French'
+  ];
+
+  // Fetch restaurants data from the API based on the selected cuisine type
+  getRestaurants([String? cuisine]) async {
+    String url = 'http://localhost:5000/api/restaurants';
+    if (cuisine != null && cuisine != 'All') {
+      url += '?cuisineType=$cuisine'; // Add filter to the URL
+    }
+    http.Response response = await http.get(Uri.parse(url));
     debugPrint(response.body);
     data = json.decode(response.body);
     setState(() {
-      usersData = data?['users'];
+      restaurantsData = data?['restaurants']; // Change 'users' to 'restaurants'
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getUsers();
+    getRestaurants(); // Get all restaurants initially
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Users List'),
+        title: Text('Restaurants List'),
         backgroundColor: Colors.indigo[900],
       ),
-      body: ListView.builder(
-        itemCount: usersData == null ? 0 : usersData?.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "$index",
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(usersData?[index]['avatar']),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      "${usersData?[index]["firstName"]} ${usersData?[index]["lastName"]}",
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.w700),
-                    ),
-                  )
-                ],
-              ),
+      body: Column(
+        children: [
+          // Filter Dropdown
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DropdownButton<String>(
+              value: selectedCuisineType ?? 'All',
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedCuisineType = newValue;
+                });
+                getRestaurants(newValue); // Fetch data based on selected filter
+              },
+              items: cuisineTypes.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-          );
-        },
+          ),
+          // Restaurant list
+          Expanded(
+            child: ListView.builder(
+              itemCount: restaurantsData == null ? 0 : restaurantsData?.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              restaurantsData?[index]['avatar'],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // Truncate the restaurant name with ellipsis if it's too long
+                              Container(
+                                width: MediaQuery.of(context).size.width - 120,
+                                child: Text(
+                                  "${restaurantsData?[index]["name"]}",
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w700),
+                                  overflow:
+                                      TextOverflow.ellipsis, // Handle overflow
+                                  maxLines:
+                                      1, // Ensure it doesn't take more than one line
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "${restaurantsData?[index]["cuisineType"]}",
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
