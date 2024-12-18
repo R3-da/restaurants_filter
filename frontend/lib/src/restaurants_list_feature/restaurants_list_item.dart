@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RestaurantListItem extends StatelessWidget {
+class RestaurantListItem extends StatefulWidget {
   final Map<String, dynamic> restaurant;
   final String? cuisineTypeName;
   final VoidCallback onTap;
@@ -13,9 +13,16 @@ class RestaurantListItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _RestaurantListItemState createState() => _RestaurantListItemState();
+}
+
+class _RestaurantListItemState extends State<RestaurantListItem> {
+  bool isLiked = false; // Track if the restaurant is liked
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Card(
         color: Colors.grey[850],
         margin: EdgeInsets.zero,
@@ -28,6 +35,7 @@ class RestaurantListItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              // Avatar section
               Container(
                 width: 80, // Width of the square avatar frame
                 height: 80, // Height of the square avatar frame
@@ -36,7 +44,7 @@ class RestaurantListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4.0), // Rounded corners
                   image: DecorationImage(
                     image: NetworkImage(
-                      restaurant['avatar'] ?? '',
+                      widget.restaurant['avatar'] ?? '',
                     ),
                     fit: BoxFit.cover, // Cover the area of the container
                   ),
@@ -48,8 +56,9 @@ class RestaurantListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
+                    // Restaurant name
                     Text(
-                      restaurant["name"] ?? 'Unknown',
+                      widget.restaurant["name"] ?? 'Unknown',
                       style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w700,
@@ -60,28 +69,30 @@ class RestaurantListItem extends StatelessWidget {
                       maxLines: 1,
                     ),
                     const SizedBox(height: 4),
-                    // Add Row with map icon and location text
+                    // Row with map icon and location text
                     Row(
                       children: [
                         Icon(
                           Icons.map, // Map icon
-                          color: Colors.green, // Customize the icon color
+                          color: Colors.grey, // Customize the icon color
                           size: 20.0, // Adjust the icon size
                         ),
                         const SizedBox(
                             width: 8), // Space between the icon and text
                         Text(
-                          restaurant["location"] ?? 'Location not available',
+                          widget.restaurant["location"] ??
+                              'Location not available',
                           style: const TextStyle(
                             fontSize: 14.0,
-                            color: Colors.white, // Customize the text color
+                            color: Colors.grey, // Customize the text color
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 4),
+                    // Cuisine type
                     Text(
-                      cuisineTypeName ?? 'Unknown',
+                      widget.cuisineTypeName ?? 'Unknown',
                       style: const TextStyle(
                         fontSize: 16.0,
                         color: Colors.grey,
@@ -92,6 +103,50 @@ class RestaurantListItem extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              // Right column with like button and rating
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Like button (Heart icon)
+                  IconButton(
+                    icon: Icon(
+                      isLiked
+                          ? Icons.favorite
+                          : Icons
+                              .favorite_border, // Toggle between filled and outlined heart
+                      color: isLiked
+                          ? Colors.red
+                          : Colors.grey, // Change color based on isLiked state
+                      size: 20.0, // Reduced icon size
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isLiked = !isLiked; // Toggle the like state
+                      });
+                    },
+                  ),
+                  // Star icon with average rating
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star, // Star icon
+                        color: Colors.yellow,
+                        size: 18.0,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        widget.restaurant["averageRating"]
+                                ?.toStringAsFixed(1) ??
+                            '0.0',
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
