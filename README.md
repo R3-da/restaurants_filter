@@ -1,13 +1,9 @@
 # Restaurant Filter - Technical Test for Edit Your Art
 
 ## Demo Video:
+
 https://github.com/user-attachments/assets/3124609b-4b18-4023-85b0-d778a113e217
 
-<p align="center">
-  <a href="https://github.com/user-attachments/assets/51ba4569-18f1-4983-ad31-5c7b018998f0" target="_blank">
-    <img src="https://via.placeholder.com/500x300.png?text=Click+to+Watch+Demo+Video" alt="Demo Video" />
-  </a>
-</p>
 
 
 
