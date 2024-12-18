@@ -48,7 +48,7 @@ class RestaurantListItem extends StatelessWidget {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "${cuisineTypeName ?? 'Unknown'} cuisine",
+                      cuisineTypeName ?? 'Unknown',
                       style: TextStyle(fontSize: 16.0),
                     ),
                   ],
