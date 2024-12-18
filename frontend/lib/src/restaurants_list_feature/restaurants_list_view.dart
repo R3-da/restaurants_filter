@@ -107,7 +107,7 @@ class RestaurantsListView extends StatelessWidget {
                       cuisineTypeName: cuisineTypeName,
                       onTap: () => onItemTap(index),
                     ),
-                    const SizedBox(height: 8.0), // Gap between items
+                    const SizedBox(height: 4.0), // Gap between items
                   ],
                 ),
               );
