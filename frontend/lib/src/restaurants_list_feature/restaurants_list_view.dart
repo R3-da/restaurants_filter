@@ -29,9 +29,22 @@ class RestaurantsListView extends StatelessWidget {
           expandedHeight: 250.0, // Height of the image
           pinned: true, // Keeps the app bar visible when scrolling
           flexibleSpace: FlexibleSpaceBar(
-            background: Image.asset(
-              'assets/images/sliver_food_image.jpg',
-              fit: BoxFit.cover,
+            title: Text(
+              'Restaurants List', // This will become the title in the sticky bar
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            background: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  'assets/images/sliver_food_image.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ],
             ),
           ),
         ),
