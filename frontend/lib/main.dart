@@ -16,7 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Map? data;
   List? restaurantsData;
   List<String> cuisineTypes = ['All']; // Default 'All' option
   String? selectedCuisineType;
@@ -24,16 +23,46 @@ class _HomePageState extends State<HomePage> {
       {}; // Map to store cuisine type ID to name
 
   // Fetch restaurants data from the API based on the selected cuisine type
-  getRestaurants([String? cuisine]) async {
+  getRestaurants([String? cuisineId]) async {
     String url = 'http://localhost:5000/api/restaurants';
-    if (cuisine != null && cuisine != 'All') {
-      url += '?cuisineType=$cuisine'; // Add filter to the URL
+    if (cuisineId != null && cuisineId != 'All') {
+      url += '/$cuisineId'; // Adjust the URL for the specific cuisine type ID
     }
-    http.Response response = await http.get(Uri.parse(url));
-    data = json.decode(response.body);
-    setState(() {
-      restaurantsData = data?['restaurants']; // Change 'users' to 'restaurants'
-    });
+
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      debugPrint('API Response: ${response.body}'); // Log the raw response
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody = json.decode(response.body);
+
+        // Check if the 'restaurants' field exists and has data
+        if (responseBody.containsKey('restaurants') &&
+            responseBody['restaurants'] != null) {
+          setState(() {
+            restaurantsData = responseBody['restaurants'];
+          });
+        } else {
+          // Handle case where no restaurants are found
+          setState(() {
+            restaurantsData = [];
+          });
+          debugPrint('No restaurants found for this cuisine type');
+        }
+      } else {
+        // Handle non-200 status code
+        setState(() {
+          restaurantsData = [];
+        });
+        debugPrint('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle any exceptions (like invalid JSON)
+      setState(() {
+        restaurantsData = [];
+      });
+      debugPrint('Error: $e');
+    }
   }
 
   // Fetch cuisine types from the API
@@ -47,7 +76,7 @@ class _HomePageState extends State<HomePage> {
     List<String> fetchedCuisineTypes = ['All']; // Default 'All' option
     // Assuming the API returns a list of cuisine types
     for (var cuisine in cuisineData['cuisineTypes']) {
-      fetchedCuisineTypes.add(cuisine['name']);
+      fetchedCuisineTypes.add(cuisine['id'].toString());
       cuisineTypeMap[cuisine['id'].toString()] =
           cuisine['name']; // Map ID to name
     }
@@ -111,12 +140,16 @@ class _HomePageState extends State<HomePage> {
                 setState(() {
                   selectedCuisineType = newValue;
                 });
+                debugPrint(
+                    'Selected Cuisine ID: $newValue'); // Log the selected cuisine ID
                 getRestaurants(newValue); // Fetch data based on selected filter
               },
               items: cuisineTypes.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(value == 'All'
+                      ? 'All'
+                      : cuisineTypeMap[value] ?? 'Unknown'),
                 );
               }).toList(),
             ),
