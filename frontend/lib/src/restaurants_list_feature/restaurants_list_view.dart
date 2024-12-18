@@ -71,11 +71,11 @@ class RestaurantsListView extends StatelessWidget {
           pinned: true,
           delegate: _StickyHeaderDelegate(
             child: Container(
-              color: Colors.grey[900], // White background for the bar
-              padding: EdgeInsets.all(0.0), // Padding for spacing
+              color: Colors.grey[900], // Background color for the bar
+              padding: EdgeInsets.fromLTRB(24, 0, 24, 0), // Padding for spacing
               child: Column(
                 mainAxisAlignment:
-                    MainAxisAlignment.end, // Align dropdown to the bottom
+                    MainAxisAlignment.center, // Center vertically
                 crossAxisAlignment:
                     CrossAxisAlignment.start, // Align to the left
                 children: [
@@ -99,7 +99,7 @@ class RestaurantsListView extends StatelessWidget {
 
               return Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0), // Horizontal padding
+                    horizontal: 16.0), // Horizontal padding
                 child: Column(
                   children: [
                     RestaurantListItem(
@@ -107,7 +107,6 @@ class RestaurantsListView extends StatelessWidget {
                       cuisineTypeName: cuisineTypeName,
                       onTap: () => onItemTap(index),
                     ),
-                    const SizedBox(height: 4.0), // Gap between items
                   ],
                 ),
               );

@@ -18,7 +18,7 @@ class RestaurantListItem extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(
-            horizontal: 16.0, vertical: 8.0), // Outer margin for spacing
+            horizontal: 0, vertical: 8.0), // Outer margin for spacing
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.0), // Rounded corners

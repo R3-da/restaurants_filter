@@ -69,48 +69,45 @@ class _RestaurantsListCuisineTypeDropdownState
   Widget build(BuildContext context) {
     bool isSelected = _selectedCuisineType != 'All';
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: GestureDetector(
-              onTap: _showCuisineDropdown,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Cuisine Type',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.green : Colors.black,
-                      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: GestureDetector(
+            onTap: _showCuisineDropdown,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Cuisine Type',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? Colors.green : Colors.black,
                     ),
-                    SizedBox(width: 8),
-                    Transform.rotate(
-                      angle: -3.14159 / 2,
-                      child: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: Colors.black,
-                        size: 12,
-                      ),
+                  ),
+                  SizedBox(width: 8),
+                  Transform.rotate(
+                    angle: -3.14159 / 2,
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.black,
+                      size: 12,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
