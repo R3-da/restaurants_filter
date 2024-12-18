@@ -39,38 +39,51 @@ class _RestaurantsListCuisineTypeDropdownState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // Align label to the left
         children: [
-          // Label with dynamic color based on selection
-          GestureDetector(
-            key: _labelKey, // Assign the GlobalKey to the GestureDetector
-            onTap:
-                _showCuisineDropdown, // Open the dropdown when the label is tapped
-            child: Row(
-              children: [
-                Align(
-                  alignment: Alignment
-                      .centerLeft, // Ensure the label is aligned to the left
-                  child: Text(
-                    'Cuisine Type',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isSelected
-                          ? Colors.green
-                          : Colors.black, // Color changes when selected
+          // Align the whole box to the left
+          Align(
+            alignment: Alignment.centerLeft, // Align the box to the left
+            child: GestureDetector(
+              key: _labelKey, // Assign the GlobalKey to the GestureDetector
+              onTap:
+                  _showCuisineDropdown, // Open the dropdown when the label is tapped
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors
+                      .grey[200], // Background color for the label and arrow
+                  borderRadius:
+                      BorderRadius.circular(8), // Optional: rounded corners
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize
+                      .min, // This ensures the box wraps its content
+                  children: [
+                    // Label with dynamic color based on selection
+                    Text(
+                      'Cuisine Type',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected
+                            ? Colors.green
+                            : Colors.black, // Color changes when selected
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                        width: 8), // Add some space between label and arrow
+                    // Arrow icon rotated to point downwards
+                    Transform.rotate(
+                      angle: -3.14159 /
+                          2, // Rotate 180 degrees (π radians) to point backwards
+                      child: Icon(
+                        Icons.arrow_back_ios_new_rounded, // The arrow icon
+                        color: Colors.black,
+                        size: 12, // Make the icon smaller
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 8), // Add some space between label and arrow
-                Transform.rotate(
-                  angle: -3.14159 /
-                      2, // Rotate 180 degrees (π radians) to point backwards
-                  child: Icon(
-                    Icons.arrow_back_ios_new_rounded, // The arrow icon
-                    color: Colors.black,
-                    size: 12, // Make the icon smaller
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
