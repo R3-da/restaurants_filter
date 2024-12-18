@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'restaurants_list_item.dart';
+import 'restaurants_list_cuisinetype_dropdown.dart'; // Import your custom dropdown widget
 
 class RestaurantsListView extends StatelessWidget {
   final List? restaurants;
   final Map<String, String> cuisineTypeMap;
+  final List<String> cuisineTypes;
+  final String? selectedCuisineType;
+  final Function(String?) onCuisineTypeChanged;
+  final bool isLoading;
   final Function(int) onItemTap;
 
   const RestaurantsListView({
     Key? key,
     required this.restaurants,
     required this.cuisineTypeMap,
+    required this.cuisineTypes,
+    required this.selectedCuisineType,
+    required this.onCuisineTypeChanged,
+    required this.isLoading,
     required this.onItemTap,
   }) : super(key: key);
 
@@ -28,19 +37,26 @@ class RestaurantsListView extends StatelessWidget {
             ),
           ),
         ),
-        // Sticky label below the image
+        // Cuisine type dropdown inside a white bar
         SliverPersistentHeader(
-          pinned: true, // Makes the label sticky
+          pinned: true,
           delegate: _StickyHeaderDelegate(
             child: Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Restaurants List',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: Colors.white, // White background for the bar
+              padding: EdgeInsets.all(0.0), // Padding for spacing
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.end, // Align dropdown to the bottom
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Align to the left
+                children: [
+                  RestaurantsListCuisineTypeDropdown(
+                    cuisineTypes: cuisineTypes,
+                    cuisineTypeMap: cuisineTypeMap,
+                    selectedCuisineType: selectedCuisineType,
+                    onChanged: onCuisineTypeChanged,
+                  ),
+                ],
               ),
             ),
           ),

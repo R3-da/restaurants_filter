@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'restaurants_list_feature/restaurants_list_cuisinetype_dropdown.dart';
 import 'restaurants_list_feature/restaurants_list_view.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -120,43 +119,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Restaurants List'),
-        backgroundColor: Colors.indigo[900],
-      ),
-      body: Column(
-        children: [
-          // Dropdown for cuisine types
-          RestaurantsListCuisineTypeDropdown(
-            cuisineTypes: cuisineTypes,
-            cuisineTypeMap: cuisineTypeMap,
-            selectedCuisineType: selectedCuisineType,
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedCuisineType = newValue;
-              });
-              getRestaurants(newValue);
-            },
-          ),
-          // List of restaurants or message when empty
-          Expanded(
-            child: isLoading
-                ? Center(
-                    child: CircularProgressIndicator()) // Show loading spinner
-                : (restaurantsData == null || restaurantsData!.isEmpty)
-                    ? Center(
-                        child: Text(
-                          'No restaurants found for the selected cuisine type.',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      )
-                    : RestaurantsListView(
-                        restaurants: restaurantsData,
-                        cuisineTypeMap: cuisineTypeMap,
-                        onItemTap: showRestaurantInfo,
-                      ),
-          ),
-        ],
+      body: RestaurantsListView(
+        restaurants: restaurantsData,
+        cuisineTypeMap: cuisineTypeMap,
+        cuisineTypes: cuisineTypes,
+        selectedCuisineType: selectedCuisineType,
+        onCuisineTypeChanged: (String? newValue) {
+          setState(() {
+            selectedCuisineType = newValue;
+          });
+          getRestaurants(newValue);
+        },
+        isLoading: isLoading,
+        onItemTap: showRestaurantInfo, // Pass the onItemTap function here
       ),
     );
   }
