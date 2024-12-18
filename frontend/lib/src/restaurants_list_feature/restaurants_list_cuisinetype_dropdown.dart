@@ -44,19 +44,33 @@ class _RestaurantsListCuisineTypeDropdownState
             key: _labelKey, // Assign the GlobalKey to the GestureDetector
             onTap:
                 _showCuisineDropdown, // Open the dropdown when the label is tapped
-            child: Align(
-              alignment: Alignment
-                  .centerLeft, // Ensure the label is aligned to the left
-              child: Text(
-                'Cuisine Type',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isSelected
-                      ? Colors.green
-                      : Colors.black, // Color changes when selected
+            child: Row(
+              children: [
+                Align(
+                  alignment: Alignment
+                      .centerLeft, // Ensure the label is aligned to the left
+                  child: Text(
+                    'Cuisine Type',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isSelected
+                          ? Colors.green
+                          : Colors.black, // Color changes when selected
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(width: 8), // Add some space between label and arrow
+                Transform.rotate(
+                  angle: -3.14159 /
+                      2, // Rotate 180 degrees (π radians) to point backwards
+                  child: Icon(
+                    Icons.arrow_back_ios_new_rounded, // The arrow icon
+                    color: Colors.black,
+                    size: 12, // Make the icon smaller
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -75,7 +89,7 @@ class _RestaurantsListCuisineTypeDropdownState
       context: context,
       position: RelativeRect.fromLTRB(
         offset.dx - renderBox.size.width, // Align to the left of the label
-        offset.dy + renderBox.size.height, // Y position (below the label)
+        offset.dy + renderBox.size.height + 8, // Y position (below the label)
         0, // Right position (no need to change)
         0, // Bottom position (no need to change)
       ),
