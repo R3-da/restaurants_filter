@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -19,6 +20,8 @@ class _HomePageState extends State<HomePage> {
   List? restaurantsData;
   List<String> cuisineTypes = ['All']; // Default 'All' option
   String? selectedCuisineType;
+  Map<String, String> cuisineTypeMap =
+      {}; // Map to store cuisine type ID to name
 
   // Fetch restaurants data from the API based on the selected cuisine type
   getRestaurants([String? cuisine]) async {
@@ -27,7 +30,6 @@ class _HomePageState extends State<HomePage> {
       url += '?cuisineType=$cuisine'; // Add filter to the URL
     }
     http.Response response = await http.get(Uri.parse(url));
-    debugPrint(response.body);
     data = json.decode(response.body);
     setState(() {
       restaurantsData = data?['restaurants']; // Change 'users' to 'restaurants'
@@ -39,13 +41,15 @@ class _HomePageState extends State<HomePage> {
     String url =
         'http://localhost:5000/api/cuisinetypes'; // API endpoint for cuisine types
     http.Response response = await http.get(Uri.parse(url));
-    debugPrint(response.body);
+    debugPrint(
+        'Cuisine Types API Response: ${response.body}'); // Debugging response
     Map cuisineData = json.decode(response.body);
     List<String> fetchedCuisineTypes = ['All']; // Default 'All' option
     // Assuming the API returns a list of cuisine types
     for (var cuisine in cuisineData['cuisineTypes']) {
-      fetchedCuisineTypes
-          .add(cuisine['name']); // Adjust according to your API response
+      fetchedCuisineTypes.add(cuisine['name']);
+      cuisineTypeMap[cuisine['id'].toString()] =
+          cuisine['name']; // Map ID to name
     }
     setState(() {
       cuisineTypes = fetchedCuisineTypes;
@@ -62,9 +66,17 @@ class _HomePageState extends State<HomePage> {
   // Function to show a SnackBar with the restaurant's info
   void showRestaurantInfo(int index) {
     final String restaurantName = restaurantsData?[index]['name'] ?? 'Unknown';
-    final String cuisineType =
-        restaurantsData?[index]['cuisineType'] ?? 'Unknown';
+    final String cuisineTypeId =
+        restaurantsData?[index]['cuisineTypeId'].toString() ??
+            'Unknown'; // Ensure it's a String
     final String avatar = restaurantsData?[index]['avatar'] ?? 'No Image';
+
+    // Get the cuisine type name from the map
+    final String cuisineTypeName = cuisineTypeMap[cuisineTypeId] ?? 'Unknown';
+
+    // Debugging: Print the restaurant data and cuisineType name
+    debugPrint(
+        'Restaurant: $restaurantName, Cuisine Type Name: $cuisineTypeName');
 
     // Hide the previous SnackBar before showing the new one
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -73,7 +85,7 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Restaurant: $restaurantName\nCuisine Type: $cuisineType\nAvatar: $avatar',
+          'Restaurant: $restaurantName\nCuisine Type: $cuisineTypeName\nAvatar: $avatar',
           style: TextStyle(fontSize: 16),
         ),
         duration: Duration(seconds: 3),
@@ -151,8 +163,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 SizedBox(height: 5),
+                                // Display the cuisine type name instead of ID
                                 Text(
-                                  "${restaurantsData?[index]["cuisineType"]}",
+                                  "Cuisine Type: ${cuisineTypeMap[restaurantsData?[index]["cuisineTypeId"].toString()] ?? 'Unknown'}",
                                   style: TextStyle(fontSize: 16.0),
                                 ),
                               ],
