@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class RestaurantsListCuisineTypeDropdown extends StatefulWidget {
-  final List<String> cuisineTypes;
   final Map<String, String> cuisineTypeMap;
   final String? selectedCuisineType;
   final ValueChanged<String?> onChanged;
 
   const RestaurantsListCuisineTypeDropdown({
     Key? key,
-    required this.cuisineTypes,
     required this.cuisineTypeMap,
     required this.selectedCuisineType,
     required this.onChanged,
@@ -22,12 +22,47 @@ class RestaurantsListCuisineTypeDropdown extends StatefulWidget {
 class _RestaurantsListCuisineTypeDropdownState
     extends State<RestaurantsListCuisineTypeDropdown> {
   late String? _selectedCuisineType;
-  final GlobalKey _labelKey = GlobalKey(); // Initialize the key here
+  List<String> cuisineTypes = ['All']; // Default 'All' option
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _selectedCuisineType = widget.selectedCuisineType ?? 'All';
+    getCuisineTypes();
+  }
+
+  // Fetch cuisine types from the API
+  Future<void> getCuisineTypes() async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
+    try {
+      String url = 'http://localhost:5000/api/cuisinetypes';
+      final response = await http.get(Uri.parse(url));
+      debugPrint('Cuisine Types API Response: ${response.body}');
+      if (response.statusCode == 200) {
+        final cuisineData = json.decode(response.body);
+        List<String> fetchedCuisineTypes = ['All'];
+        for (var cuisine in cuisineData['cuisineTypes']) {
+          fetchedCuisineTypes.add(cuisine['id'].toString());
+          widget.cuisineTypeMap[cuisine['id'].toString()] = cuisine['name'];
+        }
+        setState(() {
+          cuisineTypes = fetchedCuisineTypes;
+        });
+        debugPrint('Cuisine Types Updated: $cuisineTypes');
+      } else {
+        debugPrint('Error fetching cuisine types: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Exception fetching cuisine types: $e');
+    } finally {
+      setState(() {
+        isLoading = false; // Stop loading
+      });
+    }
   }
 
   @override
@@ -37,48 +72,36 @@ class _RestaurantsListCuisineTypeDropdownState
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align label to the left
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Align the whole box to the left
           Align(
-            alignment: Alignment.centerLeft, // Align the box to the left
+            alignment: Alignment.centerLeft,
             child: GestureDetector(
-              key: _labelKey, // Assign the GlobalKey to the GestureDetector
-              onTap:
-                  _showCuisineDropdown, // Open the dropdown when the label is tapped
+              onTap: _showCuisineDropdown,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors
-                      .grey[200], // Background color for the label and arrow
-                  borderRadius:
-                      BorderRadius.circular(8), // Optional: rounded corners
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
-                  mainAxisSize: MainAxisSize
-                      .min, // This ensures the box wraps its content
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Label with dynamic color based on selection
                     Text(
                       'Cuisine Type',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: isSelected
-                            ? Colors.green
-                            : Colors.black, // Color changes when selected
+                        color: isSelected ? Colors.green : Colors.black,
                       ),
                     ),
-                    SizedBox(
-                        width: 8), // Add some space between label and arrow
-                    // Arrow icon rotated to point downwards
+                    SizedBox(width: 8),
                     Transform.rotate(
-                      angle: -3.14159 /
-                          2, // Rotate 180 degrees (π radians) to point backwards
+                      angle: -3.14159 / 2,
                       child: Icon(
-                        Icons.arrow_back_ios_new_rounded, // The arrow icon
+                        Icons.arrow_back_ios_new_rounded,
                         color: Colors.black,
-                        size: 12, // Make the icon smaller
+                        size: 12,
                       ),
                     ),
                   ],
@@ -91,31 +114,23 @@ class _RestaurantsListCuisineTypeDropdownState
     );
   }
 
-  // Function to show the dropdown when the label is tapped
   void _showCuisineDropdown() async {
-    final RenderBox renderBox =
-        _labelKey.currentContext!.findRenderObject() as RenderBox;
-    final offset =
-        renderBox.localToGlobal(Offset.zero); // Get the position of the label
-
     final selectedValue = await showMenu<String>(
       context: context,
       position: RelativeRect.fromLTRB(
-        offset.dx - renderBox.size.width, // Align to the left of the label
-        offset.dy + renderBox.size.height + 8, // Y position (below the label)
-        0, // Right position (no need to change)
-        0, // Bottom position (no need to change)
+        0,
+        100,
+        0,
+        0,
       ),
-      items: widget.cuisineTypes.map((String value) {
+      items: cuisineTypes.map((String value) {
         return PopupMenuItem<String>(
           value: value,
           child: Row(
             children: [
-              Text(
-                value == 'All'
-                    ? 'All'
-                    : widget.cuisineTypeMap[value] ?? 'Unknown',
-              ),
+              Text(value == 'All'
+                  ? 'All'
+                  : widget.cuisineTypeMap[value] ?? 'Unknown'),
               if (value == _selectedCuisineType)
                 Icon(
                   Icons.check,
@@ -128,7 +143,6 @@ class _RestaurantsListCuisineTypeDropdownState
       }).toList(),
     );
 
-    // If the user selects a value, update the state
     if (selectedValue != null) {
       setState(() {
         _selectedCuisineType = selectedValue;

@@ -5,21 +5,19 @@ import 'restaurants_list_cuisinetype_dropdown.dart'; // Import your custom dropd
 class RestaurantsListView extends StatelessWidget {
   final List? restaurants;
   final Map<String, String> cuisineTypeMap;
-  final List<String> cuisineTypes;
   final String? selectedCuisineType;
-  final Function(String?) onCuisineTypeChanged;
   final bool isLoading;
   final Function(int) onItemTap;
+  final Function(String?) onCuisineTypeChanged; // Add this parameter
 
   const RestaurantsListView({
     Key? key,
     required this.restaurants,
     required this.cuisineTypeMap,
-    required this.cuisineTypes,
     required this.selectedCuisineType,
-    required this.onCuisineTypeChanged,
     required this.isLoading,
     required this.onItemTap,
+    required this.onCuisineTypeChanged, // Initialize onCuisineTypeChanged here
   }) : super(key: key);
 
   @override
@@ -51,10 +49,9 @@ class RestaurantsListView extends StatelessWidget {
                     CrossAxisAlignment.start, // Align to the left
                 children: [
                   RestaurantsListCuisineTypeDropdown(
-                    cuisineTypes: cuisineTypes,
                     cuisineTypeMap: cuisineTypeMap,
                     selectedCuisineType: selectedCuisineType,
-                    onChanged: onCuisineTypeChanged,
+                    onChanged: onCuisineTypeChanged, // Pass the callback
                   ),
                 ],
               ),

@@ -21,16 +21,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List? restaurantsData;
-  List<String> cuisineTypes = ['All']; // Default 'All' option
   String? selectedCuisineType;
   Map<String, String> cuisineTypeMap =
       {}; // Map to store cuisine type ID to name
-  bool isLoading = false; // To show loading state
+  bool isLoading = false;
 
   // Fetch restaurants data from the API based on the selected cuisine type
   Future<void> getRestaurants([String? cuisineId]) async {
     setState(() {
-      isLoading = true; // Start loading
+      isLoading = true;
     });
 
     try {
@@ -58,33 +57,8 @@ class _HomePageState extends State<HomePage> {
       });
     } finally {
       setState(() {
-        isLoading = false; // Stop loading
+        isLoading = false;
       });
-    }
-  }
-
-  // Fetch cuisine types from the API
-  Future<void> getCuisineTypes() async {
-    try {
-      String url = 'http://localhost:5000/api/cuisinetypes';
-      final response = await http.get(Uri.parse(url));
-      debugPrint('Cuisine Types API Response: ${response.body}');
-      if (response.statusCode == 200) {
-        final cuisineData = json.decode(response.body);
-        List<String> fetchedCuisineTypes = ['All'];
-        for (var cuisine in cuisineData['cuisineTypes']) {
-          fetchedCuisineTypes.add(cuisine['id'].toString());
-          cuisineTypeMap[cuisine['id'].toString()] = cuisine['name'];
-        }
-        setState(() {
-          cuisineTypes = fetchedCuisineTypes;
-        });
-        debugPrint('Cuisine Types Updated: $cuisineTypes');
-      } else {
-        debugPrint('Error fetching cuisine types: ${response.statusCode}');
-      }
-    } catch (e) {
-      debugPrint('Exception fetching cuisine types: $e');
     }
   }
 
@@ -113,25 +87,29 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getRestaurants();
-    getCuisineTypes();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RestaurantsListView(
-        restaurants: restaurantsData,
-        cuisineTypeMap: cuisineTypeMap,
-        cuisineTypes: cuisineTypes,
-        selectedCuisineType: selectedCuisineType,
-        onCuisineTypeChanged: (String? newValue) {
-          setState(() {
-            selectedCuisineType = newValue;
-          });
-          getRestaurants(newValue);
-        },
-        isLoading: isLoading,
-        onItemTap: showRestaurantInfo, // Pass the onItemTap function here
+      body: Column(
+        children: [
+          Expanded(
+            child: RestaurantsListView(
+              restaurants: restaurantsData,
+              cuisineTypeMap: cuisineTypeMap,
+              selectedCuisineType: selectedCuisineType,
+              isLoading: isLoading,
+              onItemTap: showRestaurantInfo,
+              onCuisineTypeChanged: (String? newCuisineType) {
+                setState(() {
+                  selectedCuisineType = newCuisineType;
+                });
+                getRestaurants(newCuisineType);
+              }, // Add the onCuisineTypeChanged callback here
+            ),
+          ),
+        ],
       ),
     );
   }
