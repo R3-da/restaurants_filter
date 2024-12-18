@@ -47,7 +47,7 @@ class _RestaurantsListCuisineTypeDropdownState
               onTap:
                   _showCuisineDropdown, // Open the dropdown when the label is tapped
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors
                       .grey[200], // Background color for the label and arrow
