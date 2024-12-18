@@ -26,9 +26,14 @@ class _HomePageState extends State<HomePage> {
   String? selectedCuisineType;
   Map<String, String> cuisineTypeMap =
       {}; // Map to store cuisine type ID to name
+  bool isLoading = false; // To show loading state
 
   // Fetch restaurants data from the API based on the selected cuisine type
   Future<void> getRestaurants([String? cuisineId]) async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
     try {
       String url = 'http://localhost:5000/api/restaurants';
       if (cuisineId != null && cuisineId != 'All') {
@@ -38,22 +43,24 @@ class _HomePageState extends State<HomePage> {
       debugPrint('Restaurants API Response: ${response.body}');
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
-        if (responseBody.containsKey('restaurants') &&
-            responseBody['restaurants'] != null) {
-          setState(() {
-            restaurantsData = responseBody['restaurants'];
-          });
-        } else {
-          setState(() {
-            restaurantsData = [];
-          });
-          debugPrint('No restaurants found for this cuisine type');
-        }
+        setState(() {
+          restaurantsData = responseBody['restaurants'] ?? [];
+        });
       } else {
         debugPrint('Error fetching restaurants: ${response.statusCode}');
+        setState(() {
+          restaurantsData = [];
+        });
       }
     } catch (e) {
       debugPrint('Exception fetching restaurants: $e');
+      setState(() {
+        restaurantsData = [];
+      });
+    } finally {
+      setState(() {
+        isLoading = false; // Stop loading
+      });
     }
   }
 
@@ -131,13 +138,23 @@ class _HomePageState extends State<HomePage> {
               getRestaurants(newValue);
             },
           ),
-          // List of restaurants
+          // List of restaurants or message when empty
           Expanded(
-            child: RestaurantsListView(
-              restaurants: restaurantsData,
-              cuisineTypeMap: cuisineTypeMap,
-              onItemTap: showRestaurantInfo,
-            ),
+            child: isLoading
+                ? Center(
+                    child: CircularProgressIndicator()) // Show loading spinner
+                : (restaurantsData == null || restaurantsData!.isEmpty)
+                    ? Center(
+                        child: Text(
+                          'No restaurants found for the selected cuisine type.',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      )
+                    : RestaurantsListView(
+                        restaurants: restaurantsData,
+                        cuisineTypeMap: cuisineTypeMap,
+                        onItemTap: showRestaurantInfo,
+                      ),
           ),
         ],
       ),
