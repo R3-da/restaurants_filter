@@ -1,4 +1,4 @@
-# Restaurant Filter - Technical Test for Edit Your Art
+# Restaurant Filter - Demo App for Edit Your Art
 
 ## Demo Video:
 
