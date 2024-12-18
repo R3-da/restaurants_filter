@@ -17,18 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Map? data;
   List? restaurantsData;
+  List<String> cuisineTypes = ['All']; // Default 'All' option
   String? selectedCuisineType;
-
-  // List of cuisine types (you can modify this list based on available types)
-  List<String> cuisineTypes = [
-    'All',
-    'Italian',
-    'Chinese',
-    'Indian',
-    'Mexican',
-    'Japanese',
-    'French'
-  ];
 
   // Fetch restaurants data from the API based on the selected cuisine type
   getRestaurants([String? cuisine]) async {
@@ -44,10 +34,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  // Fetch cuisine types from the API
+  getCuisineTypes() async {
+    String url =
+        'http://localhost:5000/api/cuisinetypes'; // API endpoint for cuisine types
+    http.Response response = await http.get(Uri.parse(url));
+    debugPrint(response.body);
+    Map cuisineData = json.decode(response.body);
+    List<String> fetchedCuisineTypes = ['All']; // Default 'All' option
+    // Assuming the API returns a list of cuisine types
+    for (var cuisine in cuisineData['cuisineTypes']) {
+      fetchedCuisineTypes
+          .add(cuisine['name']); // Adjust according to your API response
+    }
+    setState(() {
+      cuisineTypes = fetchedCuisineTypes;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getRestaurants(); // Get all restaurants initially
+    getCuisineTypes(); // Fetch cuisine types
   }
 
   @override

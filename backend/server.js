@@ -1,7 +1,7 @@
 // server.js
 const express = require('express');
 const cors = require('cors');
-const routes = require('./routes/restaurant');
+const routes = require('./routes/routes');
 const sequelize = require('./db');  // Import the sequelize instance correctly
 
 const app = express();
