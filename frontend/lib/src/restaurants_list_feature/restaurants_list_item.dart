@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert'; // To decode base64 string
+import 'dart:typed_data'; // To work with bytes
 
 class RestaurantListItem extends StatefulWidget {
   final Map<String, dynamic> restaurant;
@@ -21,6 +23,13 @@ class _RestaurantListItemState extends State<RestaurantListItem> {
 
   @override
   Widget build(BuildContext context) {
+    // Decode the base64 string into bytes
+    String? base64Image = widget.restaurant['avatar'];
+    Uint8List? imageBytes = base64Image != null
+        ? base64Decode(
+            base64Image.split(',').last) // Split to remove the data URL prefix
+        : null;
+
     return GestureDetector(
       onTap: widget.onTap,
       child: Card(
@@ -42,13 +51,21 @@ class _RestaurantListItemState extends State<RestaurantListItem> {
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle, // Make it square
                   borderRadius: BorderRadius.circular(4.0), // Rounded corners
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      widget.restaurant['avatar'] ?? '',
-                    ),
-                    fit: BoxFit.cover, // Cover the area of the container
-                  ),
+                  image: imageBytes != null
+                      ? DecorationImage(
+                          image: MemoryImage(
+                              imageBytes), // Use the base64 image data
+                          fit: BoxFit.cover, // Cover the area of the container
+                        )
+                      : null, // Fallback if no image is available
                 ),
+                child: imageBytes == null
+                    ? Icon(
+                        Icons
+                            .restaurant, // Fallback icon if image is not available
+                        color: Colors.white,
+                      )
+                    : null, // No fallback icon if image is available
               ),
               const SizedBox(width: 8), // Space between avatar and text
               Expanded(
