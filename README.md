@@ -2,7 +2,7 @@
 
 ## Demo Video:
 <p align="center">
-<img src="[https://img.shields.io/badge/Unity-0467DF.svg?style&logo=Unity&logoColor=white](https://github.com/user-attachments/assets/51ba4569-18f1-4983-ad31-5c7b018998f0)" alt="Unity" />
+<img src="https://github.com/user-attachments/assets/51ba4569-18f1-4983-ad31-5c7b018998f0" alt="Unity" />
 </p>
 
 
