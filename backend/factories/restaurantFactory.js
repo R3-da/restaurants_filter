@@ -10,7 +10,6 @@ const restaurantFactory = () => {
   const firstName = faker.company.companyName(); // Using company name for the restaurant name
   return {
     name: firstName,
-    cuisineType: faker.random.arrayElement(['Italian', 'Mexican', 'Japanese', 'Chinese', 'Indian']),
     avatar: generateAvatar(firstName), // Generate avatar based on the first name's initial
   };
 };
