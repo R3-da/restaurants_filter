@@ -16,81 +16,84 @@ class RestaurantListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-            horizontal: 0, vertical: 8.0), // Outer margin for spacing
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0), // Rounded corners
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.9), // Green shadow color
-              spreadRadius: 2.0, // Spread the shadow
-              blurRadius: 14.0, // Blur effect for the shadow
-              offset: Offset(4.0, 4.0), // Shadow direction: bottom-right
-            ),
-            BoxShadow(
-              color:
-                  Colors.black.withOpacity(0.9), // Lighter shadow on the left
-              spreadRadius: 2.0,
-              blurRadius: 14.0,
-              offset: Offset(-4.0, 4.0), // Shadow direction: bottom-left
-            ),
-          ],
-        ),
-        child: Card(
-          elevation: 0, // Disable default elevation
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Container(
-            width: double.infinity, // Ensure the card takes up full width
-            padding: const EdgeInsets.all(16.0), // Inner padding for content
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    radius: 30, // Adjust the size of the avatar
-                    backgroundImage: NetworkImage(
+      child: Card(
+        color: Colors.grey[850],
+        margin: EdgeInsets.zero,
+        elevation: 10, // Set elevation for shadow effect
+        shadowColor: Colors
+            .black, // Set the shadow color (this will work with elevation)
+        child: Container(
+          width: double.infinity, // Ensure the card takes up full width
+          padding: const EdgeInsets.all(16.0), // Inner padding for content
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 80, // Width of the square avatar frame
+                height: 80, // Height of the square avatar frame
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle, // Make it square
+                  borderRadius: BorderRadius.circular(4.0), // Rounded corners
+                  image: DecorationImage(
+                    image: NetworkImage(
                       restaurant['avatar'] ?? '',
                     ),
-                    backgroundColor:
-                        Colors.grey[300], // Fallback color if no image
+                    fit: BoxFit.cover, // Cover the area of the container
                   ),
                 ),
-                const SizedBox(width: 10), // Space between avatar and text
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        restaurant["name"] ?? 'Unknown',
-                        style: const TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        overflow: TextOverflow
-                            .ellipsis, // Prevents overflow in long names
-                        maxLines: 1,
+              ),
+              const SizedBox(width: 8), // Space between avatar and text
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      restaurant["name"] ?? 'Unknown',
+                      style: const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        cuisineTypeName ?? 'Unknown',
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.grey,
+                      overflow: TextOverflow
+                          .ellipsis, // Prevents overflow in long names
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 4),
+                    // Add Row with map icon and location text
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.map, // Map icon
+                          color: Colors.green, // Customize the icon color
+                          size: 20.0, // Adjust the icon size
                         ),
-                        overflow: TextOverflow
-                            .ellipsis, // Prevents overflow in long text
-                        maxLines: 1,
+                        const SizedBox(
+                            width: 8), // Space between the icon and text
+                        Text(
+                          restaurant["location"] ?? 'Location not available',
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.white, // Customize the text color
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      cuisineTypeName ?? 'Unknown',
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
                       ),
-                    ],
-                  ),
+                      overflow: TextOverflow
+                          .ellipsis, // Prevents overflow in long text
+                      maxLines: 1,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
