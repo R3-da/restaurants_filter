@@ -26,6 +26,8 @@ class RestaurantsListView extends StatelessWidget {
       slivers: [
         // SliverAppBar for the image at the top
         SliverAppBar(
+          surfaceTintColor: Colors.grey[900],
+          backgroundColor: Colors.grey[900],
           expandedHeight: 250.0, // Height of the image
           pinned: true, // Keeps the app bar visible when scrolling
           flexibleSpace: FlexibleSpaceBar(
@@ -52,8 +54,10 @@ class RestaurantsListView extends StatelessWidget {
                           .bottomCenter, // Start gradient at the bottom
                       end: Alignment.topCenter, // End gradient at the top
                       colors: [
-                        Colors.black.withOpacity(0.9), // Dark at the bottom
-                        Colors.black.withOpacity(0), // Transparent at the top
+                        Colors.grey[900]!
+                            .withOpacity(0.9), // Dark at the bottom
+                        Colors.grey[900]!
+                            .withOpacity(0), // Transparent at the top
                       ],
                     ),
                   ),
@@ -67,7 +71,7 @@ class RestaurantsListView extends StatelessWidget {
           pinned: true,
           delegate: _StickyHeaderDelegate(
             child: Container(
-              color: Colors.white, // White background for the bar
+              color: Colors.grey[900], // White background for the bar
               padding: EdgeInsets.all(0.0), // Padding for spacing
               child: Column(
                 mainAxisAlignment:
