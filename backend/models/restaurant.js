@@ -1,18 +1,23 @@
+// models/restaurant.js
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../db');  // Import the sequelize instance
+const sequelize = require('../db');
+const CuisineType = require('./cuisinetype');  // Import CuisineType model
 
 class Restaurant extends Model {}
 
 Restaurant.init(
   {
     name: DataTypes.STRING,
-    cuisineType: DataTypes.STRING,
     avatar: DataTypes.STRING,
   },
   {
-    sequelize,  // Pass the sequelize instance here
-    modelName: 'Restaurant',  // The model name
+    sequelize,
+    modelName: 'Restaurant',
   }
 );
 
-module.exports = Restaurant;  // Export the model
+// Define the association
+Restaurant.belongsTo(CuisineType);  // A restaurant belongs to a cuisine type
+CuisineType.hasMany(Restaurant);  // A cuisine type has many restaurants
+
+module.exports = Restaurant;

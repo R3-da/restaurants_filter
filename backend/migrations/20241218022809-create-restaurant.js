@@ -12,8 +12,14 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      cuisineType: {
-        type: Sequelize.STRING
+      cuisineTypeId: {  // Foreign key to CuisineTypes
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'CuisineTypes',  // Name of the CuisineTypes table
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',  // Optional: Update the foreign key when the referenced record is updated
+        onDelete: 'SET NULL'  // Optional: Set the foreign key to NULL when the referenced record is deleted
       },
       avatar: {
         type: Sequelize.STRING
