@@ -1,7 +1,10 @@
 # Restaurant Filter - Technical Test for Edit Your Art
 
 ## Demo Video:
-[Link to Demo Video]
+![Link to Demo Video](https://github.com/user-attachments/assets/51ba4569-18f1-4983-ad31-5c7b018998f0)
+
+
+
 
 ## Project Requirements:
 - **Backend**: Node.js v20.10.0
