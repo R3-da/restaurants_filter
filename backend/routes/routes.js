@@ -26,4 +26,26 @@ router.get('/api/cuisinetypes', async (req, res) => {
   }
 });
 
+// Route to get restaurants by specific cuisine type
+router.get('/api/restaurants/:cuisineTypeId', async (req, res) => {
+  const { cuisineTypeId } = req.params;  // Extract cuisineTypeId from request parameters
+
+  try {
+    const restaurants = await Restaurant.findAll({
+      where: {
+        cuisineTypeId: cuisineTypeId  // Filter restaurants by cuisineTypeId
+      }
+    });
+
+    if (restaurants.length === 0) {
+      return res.status(404).send('No restaurants found for this cuisine type');
+    }
+
+    res.json({ restaurants });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving restaurants by cuisine type');
+  }
+});
+
 module.exports = router;
