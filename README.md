@@ -2,7 +2,9 @@
 
 ## Demo Video:
 <p align="center">
-<img src="https://github.com/user-attachments/assets/51ba4569-18f1-4983-ad31-5c7b018998f0" alt="Unity" />
+  <a href="https://github.com/user-attachments/assets/51ba4569-18f1-4983-ad31-5c7b018998f0" target="_blank">
+    <img src="https://via.placeholder.com/500x300.png?text=Click+to+Watch+Demo+Video" alt="Demo Video" />
+  </a>
 </p>
 
 
