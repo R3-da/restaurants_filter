@@ -97,10 +97,19 @@ class RestaurantsListView extends StatelessWidget {
               final cuisineTypeName =
                   cuisineTypeMap[restaurant?["cuisineTypeId"].toString()];
 
-              return RestaurantListItem(
-                restaurant: restaurant,
-                cuisineTypeName: cuisineTypeName,
-                onTap: () => onItemTap(index),
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0), // Horizontal padding
+                child: Column(
+                  children: [
+                    RestaurantListItem(
+                      restaurant: restaurant,
+                      cuisineTypeName: cuisineTypeName,
+                      onTap: () => onItemTap(index),
+                    ),
+                    const SizedBox(height: 8.0), // Gap between items
+                  ],
+                ),
               );
             },
             childCount: restaurants?.length ?? 0,
