@@ -59,6 +59,28 @@ class _HomePageState extends State<HomePage> {
     getCuisineTypes(); // Fetch cuisine types
   }
 
+  // Function to show a SnackBar with the restaurant's info
+  void showRestaurantInfo(int index) {
+    final String restaurantName = restaurantsData?[index]['name'] ?? 'Unknown';
+    final String cuisineType =
+        restaurantsData?[index]['cuisineType'] ?? 'Unknown';
+    final String avatar = restaurantsData?[index]['avatar'] ?? 'No Image';
+
+    // Hide the previous SnackBar before showing the new one
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    // Display the Snackbar with restaurant information
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Restaurant: $restaurantName\nCuisine Type: $cuisineType\nAvatar: $avatar',
+          style: TextStyle(fontSize: 16),
+        ),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,47 +114,52 @@ class _HomePageState extends State<HomePage> {
             child: ListView.builder(
               itemCount: restaurantsData == null ? 0 : restaurantsData?.length,
               itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              restaurantsData?[index]['avatar'],
+                return GestureDetector(
+                  onTap: () =>
+                      showRestaurantInfo(index), // Show SnackBar on tap
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                restaurantsData?[index]['avatar'] ?? '',
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              // Truncate the restaurant name with ellipsis if it's too long
-                              Container(
-                                width: MediaQuery.of(context).size.width - 120,
-                                child: Text(
-                                  "${restaurantsData?[index]["name"]}",
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700),
-                                  overflow:
-                                      TextOverflow.ellipsis, // Handle overflow
-                                  maxLines:
-                                      1, // Ensure it doesn't take more than one line
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // Truncate the restaurant name with ellipsis if it's too long
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width - 120,
+                                  child: Text(
+                                    "${restaurantsData?[index]["name"]}",
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.w700),
+                                    overflow: TextOverflow
+                                        .ellipsis, // Handle overflow
+                                    maxLines:
+                                        1, // Ensure it doesn't take more than one line
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "${restaurantsData?[index]["cuisineType"]}",
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                            ],
+                                SizedBox(height: 5),
+                                Text(
+                                  "${restaurantsData?[index]["cuisineType"]}",
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
