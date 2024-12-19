@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/65be20e4-c2b7-4324-9d36-ff9b8d797505
 ```zsh
 cd backend
 npx sequelize-cli db:migrate
-npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
 npm start
 ```
 
