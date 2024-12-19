@@ -1,10 +1,7 @@
 # Restaurant Filter - Demo App for Edit Your Art
 
 ## Demo Video:
-
-https://github.com/user-attachments/assets/3124609b-4b18-4023-85b0-d778a113e217
-
-
+https://github.com/user-attachments/assets/65be20e4-c2b7-4324-9d36-ff9b8d797505
 
 
 ## Project Requirements:
