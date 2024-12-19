@@ -38,6 +38,6 @@ Alternatively, you can use the Flutter extension in Visual Studio Code for a smo
 ## Important Notes
 
 - This project was developed and tested on iOS simulators running iOS 18.0. 
-- If you plan to run the project on an Android emulator, you may need to update the backend API URL from `localhost` to `10.0.2.2` to ensure proper communication between the frontend and backend.
+- If you plan to run the project on an Android emulator, you may need to update the frontend API URL from `localhost` to `10.0.2.2` to ensure proper communication between the frontend and backend.
 
 ---
